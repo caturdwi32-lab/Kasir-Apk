@@ -1,0 +1,1665 @@
+﻿```html
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+
+    <title>Toko Buah Mama Zafran - Kasir Lengkap + Autocomplete Customer & Supplier</title>
+
+    <!-- Font Awesome 6 (free) -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; margin: 0; padding: 0; }
+
+        body { background: #eef2e6; padding: 12px; }
+
+        .container { max-width: 1400px; margin: auto; background: white; border-radius: 36px; box-shadow: 0 25px 45px rgba(0,40,0,0.15); overflow: hidden; }
+
+        .header { background: linear-gradient(145deg, #1b5e20, #2e7d32); color: white; padding: 20px 28px; }
+
+        .header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
+
+        .header p { font-size: 0.95rem; opacity: 0.95; margin-top: 5px; }
+
+        .rekening { background: rgba(255,255,255,0.2); border-radius: 40px; padding: 6px 18px; display: inline-block; margin-top: 8px; font-size: 0.9rem; }
+
+        .tabs { display: flex; background: #eaf4e5; border-bottom: 2px solid #a5d6a7; flex-wrap: wrap; gap: 4px; padding: 8px 8px 0; }
+
+        .tab { padding: 12px 22px; cursor: pointer; font-weight: 600; color: #1f4a1f; border-radius: 30px 30px 0 0; background: #c8e6c9; transition: 0.2s; }
+
+        .tab.active { background: white; color: #1b5e20; border-bottom: 3px solid #2e7d32; }
+
+        .tab i { margin-right: 8px; }
+
+        .content { padding: 25px; background: white; }
+
+        .panel { display: none; }
+
+        .panel.active { display: block; }
+
+        .row { display: flex; gap: 25px; flex-wrap: wrap; margin-bottom: 20px; }
+
+        .col { flex: 1 1 320px; }
+
+        .card { background: #f9fdf9; border-radius: 30px; padding: 22px; border: 1px solid #c5e1a5; box-shadow: 0 10px 25px rgba(0,40,0,0.05); margin-bottom: 20px; }
+
+        .card h3 { font-size: 1.3rem; color: #1f3a1f; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+
+        .input-group { margin-bottom: 16px; position: relative; }
+
+        .input-group label { display: block; font-weight: 600; font-size: 0.9rem; color: #1b4b1b; margin-bottom: 6px; }
+
+        .input-group input, .input-group select, .input-group textarea { width: 100%; padding: 12px 20px; border: 2px solid #c5e1a5; border-radius: 40px; font-size: 1rem; background: white; transition: 0.15s; }
+
+        .input-group input:focus { border-color: #2e7d32; outline: none; }
+
+        .suggestions { position: absolute; background: white; border: 1px solid #a5d6a7; max-height: 200px; overflow-y: auto; width: 100%; z-index: 1000; border-radius: 0 0 25px 25px; box-shadow: 0 10px 20px rgba(0,30,0,0.1); display: none; }
+
+        .suggestions div { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #e0f0da; }
+
+        .suggestions div:hover { background: #e8f5e9; }
+
+        .btn { background: #2e7d32; color: white; border: none; padding: 12px 28px; border-radius: 60px; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 6px 14px rgba(46,125,50,0.3); transition: 0.1s; border: 1px solid #1e5a22; }
+
+        .btn-outline { background: white; color: #2e7d32; border: 2px solid #2e7d32; box-shadow: none; }
+
+        .btn-sm { padding: 8px 18px; font-size: 0.9rem; }
+
+        .flex { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 24px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,30,0,0.05); }
+
+        th { background: #c8e6c9; color: #1b4b1b; font-weight: 600; padding: 14px 8px; text-align: left; }
+
+        td { padding: 12px 8px; border-bottom: 1px solid #e0f0da; }
+
+        .icon-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 8px; margin: 0 2px; border-radius: 50%; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; }
+
+        .icon-btn:hover { background: #e0f0da; }
+
+        .struk { font-family: 'Courier New', monospace; background: #f4f9f4; padding: 22px; border-radius: 25px; border: 2px dashed #81c784; white-space: pre-wrap; margin-top: 20px; }
+
+        .kembalian-display { font-size: 1.5rem; font-weight: 700; color: #1b5e20; background: #e8f5e9; padding: 12px 28px; border-radius: 60px; display: inline-block; margin-top: 12px; }
+
+        .filter-periode { background: #e8f5e9; padding: 15px 22px; border-radius: 60px; margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+
+        .laporan-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 25px; }
+
+        footer { background: #eaf4e5; padding: 18px 25px; text-align: center; color: #2e5e2e; border-top: 1px solid #c5e1a5; }
+
+        @media (max-width: 600px) { .tab { padding: 10px 14px; font-size: 0.85rem; } .content { padding: 15px; } }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container" id="app">
+
+    <div class="header">
+
+        <h1><i class="fas fa-store-alt"></i> TOKO BUAH MAMA ZAFRAN</h1>
+
+        <p><i class="fas fa-map-pin"></i> Depan Pos Security Greenland Forest Hill / Sebrang Kantor Desa Semplak Barat</p>
+
+        <p><i class="fab fa-whatsapp"></i> 087874136597 | <i class="fas fa-university"></i> SEABANK a.n. Nurhayati • 901305313353</p>
+
+        <div class="rekening"><i class="fas fa-credit-card"></i> Rekening: 901305313353 (SEABANK / Nurhayati)</div>
+
+    </div>
+
+
+
+    <!-- Tabs Navigation -->
+
+    <div class="tabs" id="tabsContainer">
+
+        <div class="tab active" data-tab="kasir"><i class="fas fa-cash-register"></i> KASIR</div>
+
+        <div class="tab" data-tab="produk"><i class="fas fa-apple-alt"></i> PRODUK</div>
+
+        <div class="tab" data-tab="pembelian"><i class="fas fa-truck-loading"></i> PEMBELIAN</div>
+
+        <div class="tab" data-tab="biaya"><i class="fas fa-file-invoice-dollar"></i> BIAYA</div>
+
+        <div class="tab" data-tab="laporan"><i class="fas fa-chart-pie"></i> LAPORAN</div>
+
+    </div>
+
+
+
+    <div class="content">
+
+        <!-- ================== PANEL KASIR ================== -->
+
+        <div id="panelKasir" class="panel active">
+
+            <div class="row">
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-shopping-cart"></i> Transaksi Baru</h3>
+
+                        <div class="input-group" style="position:relative;">
+
+                            <label><i class="fas fa-user"></i> Nama Customer</label>
+
+                            <input type="text" id="kasirCustomer" placeholder="Mis: Budi / Umum" value="Umum" autocomplete="off">
+
+                            <div id="customerSuggestions" class="suggestions"></div>
+
+                        </div>
+
+                        <div class="input-group" style="position:relative;">
+
+                            <label><i class="fas fa-search"></i> Cari Produk</label>
+
+                            <input type="text" id="kasirProdukInput" placeholder="Ketik nama buah..." autocomplete="off">
+
+                            <input type="hidden" id="kasirProdukId">
+
+                            <div id="kasirProdukSuggestions" class="suggestions"></div>
+
+                        </div>
+
+                        <div class="flex">
+
+                            <div style="flex:2;"><label>Berat (Kg)</label><input type="number" id="kasirBeratKg" step="0.001" min="0" value="1"></div>
+
+                            <div style="flex:1;"><label>Tipe Harga</label>
+
+                                <select id="kasirTipeHarga">
+
+                                    <option value="ecer">Ecer</option>
+
+                                    <option value="reseller">Reseller</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <button class="btn" id="tambahKeKeranjang" style="width:100%;"><i class="fas fa-plus-circle"></i> Tambah ke Keranjang</button>
+
+                    </div>
+
+
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-history"></i> Mode Revisi Transaksi</h3>
+
+                        <div class="input-group">
+
+                            <label>Nomor Faktur yang Diedit</label>
+
+                            <input type="text" id="editNomorTransaksi" placeholder="Kosong jika baru" readonly>
+
+                            <input type="hidden" id="editIdTransaksi">
+
+                        </div>
+
+                        <div class="input-group">
+
+                            <label>Catatan Revisi <span style="font-weight:400;">(wajib jika revisi)</span></label>
+
+                            <textarea id="revisiNote" rows="2" placeholder="Alasan perubahan..."></textarea>
+
+                        </div>
+
+                        <button class="btn-outline btn-sm" id="batalEdit" style="display:none;"><i class="fas fa-times"></i> Batal Edit</button>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-clipboard-list"></i> Keranjang Belanja</h3>
+
+                        <div style="overflow-x:auto;">
+
+                            <table id="tabelKeranjang">
+
+                                <thead><tr><th>Produk</th><th>Berat(g)</th><th>Harga/kg</th><th>Subtotal</th><th>Aksi</th></tr></thead>
+
+                                <tbody id="keranjangBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                        <div class="flex" style="justify-content:space-between; margin-top:20px;">
+
+                            <span style="font-weight:700; font-size:1.2rem;">Total: Rp <span id="totalKeranjang">0</span></span>
+
+                            <button class="btn-outline btn-sm" id="resetKeranjang"><i class="fas fa-undo-alt"></i> Reset</button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-money-bill-wave"></i> Pembayaran</h3>
+
+                        <div class="input-group">
+
+                            <label>Jumlah Bayar (Rp)</label>
+
+                            <input type="number" id="jumlahBayar" min="0" step="1000" value="0">
+
+                        </div>
+
+                        <button class="btn" id="prosesTransaksi" style="background:#2e7d32; width:100%;"><i class="fas fa-check-circle"></i> Proses Transaksi</button>
+
+                        <div id="kembalianDisplay" class="kembalian-display" style="display:none;"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="areaStruk" class="struk" style="display:none;"></div>
+
+            <button id="downloadStruk" class="btn-outline btn-sm" style="display:none;"><i class="fas fa-download"></i> Download Struk (.txt)</button>
+
+        </div>
+
+
+
+        <!-- ================== PANEL PRODUK ================== -->
+
+        <div id="panelProduk" class="panel">
+
+            <div class="row">
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-plus"></i> Tambah Produk Baru</h3>
+
+                        <div class="input-group"><label>Nama Buah</label><input id="produkNama" placeholder="Contoh: Apel Fuji"></div>
+
+                        <div class="input-group"><label>Harga Ecer (Rp/kg)</label><input id="produkHargaEcer" type="number" value="25000"></div>
+
+                        <div class="input-group"><label>Harga Reseller (Rp/kg)</label><input id="produkHargaReseller" type="number" value="20000"></div>
+
+                        <div class="input-group"><label>Stok Awal (gram)</label><input id="produkStokGram" type="number" value="5000"></div>
+
+                        <button class="btn" id="tambahProduk"><i class="fas fa-save"></i> Simpan Produk</button>
+
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-boxes"></i> Daftar Produk & Stok</h3>
+
+                        <div style="max-height:350px; overflow:auto;">
+
+                            <table id="tabelProduk">
+
+                                <thead><tr><th>Nama</th><th>Ecer/kg</th><th>Reseller/kg</th><th>Stok (g)</th></tr></thead>
+
+                                <tbody id="produkBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================== PANEL PEMBELIAN (dengan Supplier) ================== -->
+
+        <div id="panelPembelian" class="panel">
+
+            <div class="row">
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-truck"></i> Input Pembelian (Stok Masuk)</h3>
+
+                        <div class="input-group" style="position:relative;">
+
+                            <label><i class="fas fa-user-tie"></i> Nama Supplier</label>
+
+                            <input type="text" id="beliSupplier" placeholder="PT. Buah Segar" autocomplete="off">
+
+                            <div id="supplierSuggestions" class="suggestions"></div>
+
+                        </div>
+
+                        <div class="input-group" style="position:relative;">
+
+                            <label><i class="fas fa-search"></i> Cari Produk</label>
+
+                            <input type="text" id="beliProdukInput" placeholder="Ketik nama buah..." autocomplete="off">
+
+                            <input type="hidden" id="beliProdukId">
+
+                            <div id="beliProdukSuggestions" class="suggestions"></div>
+
+                        </div>
+
+                        <div class="flex">
+
+                            <div style="flex:1;"><label>Berat (Kg)</label><input id="beliBeratKg" type="number" step="0.1" value="1"></div>
+
+                            <div style="flex:1;"><label>Total Harga (Rp)</label><input id="beliTotalHarga" type="number" value="0"></div>
+
+                        </div>
+
+                        <div class="input-group"><label>Keterangan / No. Faktur</label><input id="beliKeterangan" placeholder="misal: PO-001"></div>
+
+                        <button class="btn" id="simpanPembelian"><i class="fas fa-cart-plus"></i> Simpan Pembelian</button>
+
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-history"></i> Riwayat Pembelian</h3>
+
+                        <div style="max-height:350px; overflow:auto;">
+
+                            <table><thead><tr><th>Tanggal</th><th>Supplier</th><th>Produk</th><th>Gram</th><th>Total</th></tr></thead>
+
+                            <tbody id="pembelianBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================== PANEL BIAYA OPERASIONAL ================== -->
+
+        <div id="panelBiaya" class="panel">
+
+            <div class="row">
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-plus-circle"></i> Tambah Biaya Operasional</h3>
+
+                        <div class="input-group"><label>Tanggal</label><input type="date" id="biayaTanggal"></div>
+
+                        <div class="input-group"><label>Keterangan</label><input id="biayaKet" placeholder="Listrik, sewa, dll"></div>
+
+                        <div class="input-group"><label>Jumlah (Rp)</label><input id="biayaJumlah" type="number" value="0"></div>
+
+                        <button class="btn" id="simpanBiaya"><i class="fas fa-save"></i> Simpan Biaya</button>
+
+                    </div>
+
+                </div>
+
+                <div class="col">
+
+                    <div class="card">
+
+                        <h3><i class="fas fa-list"></i> Daftar Biaya</h3>
+
+                        <div style="max-height:350px; overflow:auto;">
+
+                            <table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jumlah</th></tr></thead>
+
+                            <tbody id="biayaBody"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================== PANEL LAPORAN (dengan filter & tombol edit) ================== -->
+
+        <div id="panelLaporan" class="panel">
+
+            <div class="filter-periode">
+
+                <i class="fas fa-calendar-alt"></i>
+
+                <label>Periode: <input type="date" id="startDate"> s/d <input type="date" id="endDate"></label>
+
+                <button class="btn btn-sm" id="filterLaporan"><i class="fas fa-filter"></i> Tampilkan</button>
+
+                <button class="btn-outline btn-sm" id="resetFilter"><i class="fas fa-undo"></i> Reset</button>
+
+            </div>
+
+            <div class="laporan-actions">
+
+                <button class="btn" id="downloadLaporanStok"><i class="fas fa-file-alt"></i> Stok</button>
+
+                <button class="btn" id="downloadLaporanBiaya"><i class="fas fa-file-invoice"></i> Biaya (periode)</button>
+
+                <button class="btn" id="downloadLaporanLabaRugi"><i class="fas fa-chart-line"></i> Laba Rugi</button>
+
+                <button class="btn-outline" id="downloadSemuaLaporan"><i class="fas fa-download"></i> Semua (periode)</button>
+
+            </div>
+
+            <div class="card">
+
+                <h3><i class="fas fa-chart-bar"></i> LABA RUGI <span id="periodeLabel">(Semua Data)</span></h3>
+
+                <table>
+
+                    <tr><th>Total Pendapatan (Penjualan)</th><td>Rp <span id="labaTotalPendapatan">0</span></td></tr>
+
+                    <tr><th>Total Biaya Pembelian</th><td>Rp <span id="labaTotalPembelian">0</span></td></tr>
+
+                    <tr><th>Total Biaya Operasional</th><td>Rp <span id="labaTotalOperasional">0</span></td></tr>
+
+                    <tr><th style="font-size:1.2rem;">LABA BERSIH</th><td style="font-size:1.4rem; font-weight:700;">Rp <span id="labaBersih">0</span></td></tr>
+
+                </table>
+
+                <hr style="margin:25px 0;">
+
+                <h4><i class="fas fa-boxes"></i> Stok terkini (inventori saat ini)</h4>
+
+                <div style="max-height:250px; overflow:auto;">
+
+                    <table><thead><tr><th>Produk</th><th>Stok (gram)</th><th>Stok (kg)</th></tr></thead>
+
+                    <tbody id="laporanStokBody"></tbody>
+
+                </div>
+
+                <hr>
+
+                <h4><i class="fas fa-receipt"></i> Transaksi <span id="transaksiPeriodeLabel"></span></h4>
+
+                <div style="max-height:400px; overflow:auto;">
+
+                    <table><thead><tr><th>No. Faktur</th><th>Customer</th><th>Tanggal</th><th>Total</th><th>Aksi</th></tr></thead>
+
+                    <tbody id="laporanTransaksiBody"></tbody>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer><i class="fas fa-copyright"></i> Toko Mama Zafran – Data tersimpan di browser Anda</footer>
+
+</div>
+
+
+
+<script>
+
+    (function() {
+
+        // ==================== DATA INIT & STORAGE ====================
+
+        let data = {
+
+            products: [],
+
+            purchases: [],
+
+            operationalCosts: [],
+
+            transactions: []
+
+        };
+
+
+
+        const STORAGE_KEY = 'tokoMamaZafranDataV3';
+
+
+
+        function loadData() {
+
+            const stored = localStorage.getItem(STORAGE_KEY);
+
+            if (stored) {
+
+                try { data = JSON.parse(stored); } catch(e) { console.warn("Parse error"); }
+
+            } else {
+
+                // Sample data
+
+                data.products = [
+
+                    { id: Date.now() + 1, nama: 'Apel Merah', hargaEcer: 28000, hargaReseller: 24000, stokGram: 8000 },
+
+                    { id: Date.now() + 2, nama: 'Jeruk Medan', hargaEcer: 22000, hargaReseller: 18000, stokGram: 6000 },
+
+                    { id: Date.now() + 3, nama: 'Mangga Harum', hargaEcer: 35000, hargaReseller: 30000, stokGram: 4500 }
+
+                ];
+
+                data.purchases = [];
+
+                data.operationalCosts = [];
+
+                data.transactions = [];
+
+            }
+
+            // Migrasi: pastikan setiap transaksi punya field yang diperlukan
+
+            data.transactions = data.transactions.map(t => {
+
+                if (!t.customer) t.customer = 'Umum';
+
+                if (!t.nomorFaktur) t.nomorFaktur = generateNomorFaktur(t.id);
+
+                if (!t.status) t.status = 'active';
+
+                if (!t.revisiNote) t.revisiNote = '';
+
+                if (!t.revisiDari) t.revisiDari = null;
+
+                if (!t.tanggalISO) t.tanggalISO = new Date().toISOString().slice(0,10);
+
+                if (!t.tanggalTampil) t.tanggalTampil = new Date().toLocaleString('id-ID');
+
+                return t;
+
+            });
+
+            data.purchases = data.purchases.map(p => { if (!p.supplier) p.supplier = 'Unknown'; return p; });
+
+            saveData();
+
+        }
+
+        function saveData() {
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+        }
+
+
+
+        function generateNomorFaktur(id) {
+
+            const d = new Date();
+
+            const y = d.getFullYear().toString().slice(-2);
+
+            const m = ('0'+(d.getMonth()+1)).slice(-2);
+
+            const day = ('0'+d.getDate()).slice(-2);
+
+            return `INV-${y}${m}${day}-${String(id).slice(-6)}`;
+
+        }
+
+
+
+        // ==================== HELPER ====================
+
+        function formatRupiah(angka) {
+
+            return new Intl.NumberFormat('id-ID').format(angka);
+
+        }
+
+        function getTanggalNow() {
+
+            return new Date().toISOString().slice(0,10);
+
+        }
+
+
+
+        // ==================== AUTOCOMPLETE UNTUK PRODUK ====================
+
+        function setupAutocompleteProduk(inputId, suggestionsId, hiddenId, callback) {
+
+            const input = document.getElementById(inputId);
+
+            const suggestions = document.getElementById(suggestionsId);
+
+            const hidden = document.getElementById(hiddenId);
+
+            if (!input) return;
+
+            input.addEventListener('input', function() {
+
+                const query = this.value.toLowerCase().trim();
+
+                if (query.length < 1) { suggestions.style.display = 'none'; hidden.value = ''; return; }
+
+                const filtered = data.products.filter(p => p.nama.toLowerCase().includes(query));
+
+                suggestions.innerHTML = '';
+
+                if (filtered.length === 0) { suggestions.style.display = 'none'; return; }
+
+                filtered.forEach(p => {
+
+                    const div = document.createElement('div');
+
+                    div.textContent = `${p.nama} (stok: ${p.stokGram} g)`;
+
+                    div.dataset.id = p.id;
+
+                    div.dataset.nama = p.nama;
+
+                    div.dataset.ecer = p.hargaEcer;
+
+                    div.dataset.reseller = p.hargaReseller;
+
+                    div.addEventListener('click', function() {
+
+                        input.value = this.dataset.nama;
+
+                        hidden.value = this.dataset.id;
+
+                        suggestions.style.display = 'none';
+
+                        if (callback) callback(p);
+
+                    });
+
+                    suggestions.appendChild(div);
+
+                });
+
+                suggestions.style.display = 'block';
+
+            });
+
+            document.addEventListener('click', e => {
+
+                if (!input.contains(e.target) && !suggestions.contains(e.target)) suggestions.style.display = 'none';
+
+            });
+
+        }
+
+
+
+        // ==================== AUTOCOMPLETE UNTUK TEXT BIASA (customer, supplier) ====================
+
+        function setupTextAutocomplete(inputId, suggestionsId, sourceListFn) {
+
+            const input = document.getElementById(inputId);
+
+            const suggestions = document.getElementById(suggestionsId);
+
+            if (!input) return;
+
+            input.addEventListener('input', function() {
+
+                const query = this.value.toLowerCase().trim();
+
+                if (query.length < 1) { suggestions.style.display = 'none'; return; }
+
+                const list = sourceListFn().filter(item => item.toLowerCase().includes(query));
+
+                suggestions.innerHTML = '';
+
+                if (list.length === 0) { suggestions.style.display = 'none'; return; }
+
+                list.forEach(item => {
+
+                    const div = document.createElement('div');
+
+                    div.textContent = item;
+
+                    div.addEventListener('click', () => {
+
+                        input.value = item;
+
+                        suggestions.style.display = 'none';
+
+                    });
+
+                    suggestions.appendChild(div);
+
+                });
+
+                suggestions.style.display = 'block';
+
+            });
+
+            document.addEventListener('click', e => {
+
+                if (!input.contains(e.target) && !suggestions.contains(e.target)) suggestions.style.display = 'none';
+
+            });
+
+        }
+
+
+
+        // Sumber data untuk customer & supplier
+
+        function getUniqueCustomers() {
+
+            const customers = data.transactions.map(t => t.customer).filter(Boolean);
+
+            return [...new Set(customers)];
+
+        }
+
+        function getUniqueSuppliers() {
+
+            const suppliers = data.purchases.map(p => p.supplier).filter(Boolean);
+
+            return [...new Set(suppliers)];
+
+        }
+
+
+
+        // ==================== KASIR & KERANJANG ====================
+
+        let keranjang = []; // item sementara
+
+        let editMode = { active: false, idTransaksiLama: null, nomorLama: '' };
+
+
+
+        function renderKeranjang() {
+
+            const tbody = document.getElementById('keranjangBody');
+
+            const totalSpan = document.getElementById('totalKeranjang');
+
+            if (!tbody) return;
+
+            let total = 0;
+
+            tbody.innerHTML = keranjang.map((item, idx) => {
+
+                total += item.subtotal;
+
+                return `<tr>
+
+                    <td>${item.nama}</td><td>${item.beratGram} g</td><td>${formatRupiah(item.hargaPerKg)}</td><td>${formatRupiah(item.subtotal)}</td>
+
+                    <td>
+
+                        <button class="icon-btn" onclick="editItemKeranjang(${idx})"><i class="fas fa-edit"></i></button>
+
+                        <button class="icon-btn" onclick="hapusItemKeranjang(${idx})"><i class="fas fa-trash"></i></button>
+
+                    </td>
+
+                </tr>`;
+
+            }).join('');
+
+            totalSpan.innerText = formatRupiah(total);
+
+            updateKembalianPreview();
+
+        }
+
+
+
+        window.editItemKeranjang = (idx) => {
+
+            const item = keranjang[idx];
+
+            keranjang.splice(idx, 1);
+
+            document.getElementById('kasirProdukInput').value = item.nama;
+
+            document.getElementById('kasirProdukId').value = item.idProduk;
+
+            document.getElementById('kasirBeratKg').value = item.beratGram / 1000;
+
+            document.getElementById('kasirTipeHarga').value = item.tipeHarga;
+
+            renderKeranjang();
+
+        };
+
+        window.hapusItemKeranjang = (idx) => {
+
+            keranjang.splice(idx, 1);
+
+            renderKeranjang();
+
+        };
+
+
+
+        document.getElementById('tambahKeKeranjang')?.addEventListener('click', () => {
+
+            const idProduk = document.getElementById('kasirProdukId').value;
+
+            if (!idProduk) return alert('Pilih produk dari saran');
+
+            const produk = data.products.find(p => p.id == idProduk);
+
+            if (!produk) return alert('Produk tidak ditemukan');
+
+            const beratKg = parseFloat(document.getElementById('kasirBeratKg').value) || 0;
+
+            if (beratKg <= 0) return alert('Berat harus >0');
+
+            const beratGram = beratKg * 1000;
+
+            if (beratGram > produk.stokGram) return alert(`Stok tidak cukup. Sisa: ${produk.stokGram} g`);
+
+            const tipe = document.getElementById('kasirTipeHarga').value;
+
+            const hargaPerKg = tipe === 'ecer' ? produk.hargaEcer : produk.hargaReseller;
+
+            const subtotal = hargaPerKg * beratKg;
+
+            keranjang.push({
+
+                idProduk: produk.id,
+
+                nama: produk.nama,
+
+                beratGram,
+
+                hargaPerKg,
+
+                tipeHarga: tipe,
+
+                subtotal
+
+            });
+
+            renderKeranjang();
+
+            document.getElementById('kasirProdukInput').value = '';
+
+            document.getElementById('kasirProdukId').value = '';
+
+            document.getElementById('kasirBeratKg').value = 1;
+
+        });
+
+
+
+        function updateKembalianPreview() {
+
+            const bayar = parseFloat(document.getElementById('jumlahBayar').value) || 0;
+
+            const total = keranjang.reduce((s,i) => s + i.subtotal, 0);
+
+            const div = document.getElementById('kembalianDisplay');
+
+            if (bayar >= total && total > 0) {
+
+                div.style.display = 'inline-block';
+
+                div.innerText = `💵 Kembalian: Rp ${formatRupiah(bayar - total)}`;
+
+            } else {
+
+                div.style.display = 'none';
+
+            }
+
+        }
+
+        document.getElementById('jumlahBayar')?.addEventListener('input', updateKembalianPreview);
+
+
+
+        document.getElementById('resetKeranjang')?.addEventListener('click', () => {
+
+            keranjang = [];
+
+            renderKeranjang();
+
+            document.getElementById('kembalianDisplay').style.display = 'none';
+
+            document.getElementById('areaStruk').style.display = 'none';
+
+            document.getElementById('downloadStruk').style.display = 'none';
+
+            document.getElementById('editIdTransaksi').value = '';
+
+            document.getElementById('editNomorTransaksi').value = '';
+
+            document.getElementById('revisiNote').value = '';
+
+            document.getElementById('batalEdit').style.display = 'none';
+
+        });
+
+
+
+        document.getElementById('batalEdit')?.addEventListener('click', () => {
+
+            document.getElementById('editIdTransaksi').value = '';
+
+            document.getElementById('editNomorTransaksi').value = '';
+
+            document.getElementById('revisiNote').value = '';
+
+            document.getElementById('batalEdit').style.display = 'none';
+
+        });
+
+
+
+        document.getElementById('prosesTransaksi')?.addEventListener('click', () => {
+
+            if (keranjang.length === 0) return alert('Keranjang kosong');
+
+            const customer = document.getElementById('kasirCustomer').value.trim() || 'Umum';
+
+            const bayar = parseFloat(document.getElementById('jumlahBayar').value) || 0;
+
+            const total = keranjang.reduce((s,i) => s + i.subtotal, 0);
+
+            if (bayar < total) return alert('Uang kurang!');
+
+
+
+            const editId = document.getElementById('editIdTransaksi').value;
+
+            const revisiNote = document.getElementById('revisiNote').value.trim();
+
+            if (editId && !revisiNote) return alert('Catatan revisi wajib diisi');
+
+
+
+            // Kurangi stok
+
+            for (let item of keranjang) {
+
+                const prod = data.products.find(p => p.id == item.idProduk);
+
+                if (prod) prod.stokGram -= item.beratGram;
+
+            }
+
+
+
+            const now = new Date();
+
+            const tanggalISO = now.toISOString().slice(0,10);
+
+            const idBaru = Date.now();
+
+            const nomorFaktur = generateNomorFaktur(idBaru);
+
+
+
+            const transaksiBaru = {
+
+                id: idBaru,
+
+                nomorFaktur: nomorFaktur,
+
+                tanggalISO: tanggalISO,
+
+                tanggalTampil: now.toLocaleString('id-ID'),
+
+                customer: customer,
+
+                items: keranjang.map(it => ({...it})),
+
+                total: total,
+
+                bayar: bayar,
+
+                kembalian: bayar - total,
+
+                status: 'active',
+
+                revisiNote: revisiNote || '',
+
+                revisiDari: editId || null
+
+            };
+
+
+
+            if (editId) {
+
+                const transLama = data.transactions.find(t => t.id == editId);
+
+                if (transLama) {
+
+                    transLama.status = 'revised';
+
+                    transLama.revisiKe = idBaru;
+
+                    transLama.revisiNoteKeluar = revisiNote;
+
+                }
+
+            }
+
+
+
+            data.transactions.push(transaksiBaru);
+
+            saveData();
+
+
+
+            // Tampilkan struk
+
+            const strukDiv = document.getElementById('areaStruk');
+
+            strukDiv.style.display = 'block';
+
+            let struk = `🍑 TOKO BUAH MAMA ZAFRAN\n`;
+
+            struk += `No. Faktur: ${nomorFaktur}\n`;
+
+            struk += `Customer: ${customer}\n`;
+
+            if (editId) struk += `Revisi dari: ${document.getElementById('editNomorTransaksi').value}\nCatatan: ${revisiNote}\n`;
+
+            struk += `==============================\n`;
+
+            keranjang.forEach(i => { struk += `${i.nama} ${i.beratGram/1000}kg x ${formatRupiah(i.hargaPerKg)} = ${formatRupiah(i.subtotal)}\n`; });
+
+            struk += `------------------------------\nTotal: Rp${formatRupiah(total)}\nBayar: Rp${formatRupiah(bayar)}\nKembali: Rp${formatRupiah(bayar-total)}\n`;
+
+            struk += `==============================\nTerima kasih!\n`;
+
+            strukDiv.innerText = struk;
+
+            document.getElementById('downloadStruk').style.display = 'inline-block';
+
+            document.getElementById('downloadStruk').onclick = () => downloadTeks(`struk_${nomorFaktur}.txt`, struk);
+
+
+
+            keranjang = [];
+
+            renderKeranjang();
+
+            document.getElementById('jumlahBayar').value = 0;
+
+            document.getElementById('kembalianDisplay').style.display = 'none';
+
+            document.getElementById('editIdTransaksi').value = '';
+
+            document.getElementById('editNomorTransaksi').value = '';
+
+            document.getElementById('revisiNote').value = '';
+
+            document.getElementById('batalEdit').style.display = 'none';
+
+        });
+
+
+
+        function downloadTeks(nama, konten) {
+
+            const blob = new Blob([konten], {type:'text/plain'});
+
+            const link = document.createElement('a');
+
+            link.href = URL.createObjectURL(blob);
+
+            link.download = nama;
+
+            link.click();
+
+        }
+
+
+
+        // ==================== PRODUK ====================
+
+        document.getElementById('tambahProduk')?.addEventListener('click', () => {
+
+            const nama = document.getElementById('produkNama').value.trim();
+
+            const ecer = parseFloat(document.getElementById('produkHargaEcer').value);
+
+            const reseller = parseFloat(document.getElementById('produkHargaReseller').value);
+
+            const stok = parseFloat(document.getElementById('produkStokGram').value);
+
+            if (!nama || isNaN(ecer) || isNaN(reseller) || isNaN(stok)) return alert('Isi semua');
+
+            data.products.push({ id: Date.now(), nama, hargaEcer: ecer, hargaReseller: reseller, stokGram: stok });
+
+            saveData();
+
+            renderTabelProduk();
+
+            document.getElementById('produkNama').value = '';
+
+        });
+
+
+
+        function renderTabelProduk() {
+
+            const tbody = document.getElementById('produkBody');
+
+            if (!tbody) return;
+
+            tbody.innerHTML = data.products.map(p => `<tr><td>${p.nama}</td><td>${formatRupiah(p.hargaEcer)}</td><td>${formatRupiah(p.hargaReseller)}</td><td>${p.stokGram} g</td></tr>`).join('');
+
+        }
+
+
+
+        // ==================== PEMBELIAN ====================
+
+        document.getElementById('simpanPembelian')?.addEventListener('click', () => {
+
+            const idProduk = document.getElementById('beliProdukId').value;
+
+            if (!idProduk) return alert('Pilih produk');
+
+            const produk = data.products.find(p => p.id == idProduk);
+
+            if (!produk) return;
+
+            const supplier = document.getElementById('beliSupplier').value.trim() || 'Unknown';
+
+            const beratKg = parseFloat(document.getElementById('beliBeratKg').value) || 0;
+
+            if (beratKg <= 0) return alert('Berat > 0');
+
+            const beratGram = beratKg * 1000;
+
+            const totalHarga = parseFloat(document.getElementById('beliTotalHarga').value) || 0;
+
+            const keterangan = document.getElementById('beliKeterangan').value;
+
+
+
+            produk.stokGram += beratGram;
+
+            data.purchases.push({
+
+                id: Date.now(),
+
+                tanggal: getTanggalNow(),
+
+                supplier: supplier,
+
+                idProduk, namaProduk: produk.nama,
+
+                beratGram, totalHarga, keterangan
+
+            });
+
+            saveData();
+
+            renderPembelianTable();
+
+            // reset form
+
+            document.getElementById('beliSupplier').value = '';
+
+            document.getElementById('beliProdukInput').value = '';
+
+            document.getElementById('beliProdukId').value = '';
+
+            document.getElementById('beliBeratKg').value = 1;
+
+            document.getElementById('beliTotalHarga').value = 0;
+
+            document.getElementById('beliKeterangan').value = '';
+
+        });
+
+
+
+        function renderPembelianTable() {
+
+            const tbody = document.getElementById('pembelianBody');
+
+            if (!tbody) return;
+
+            tbody.innerHTML = data.purchases.slice().reverse().map(p => 
+
+                `<tr><td>${p.tanggal}</td><td>${p.supplier}</td><td>${p.namaProduk}</td><td>${p.beratGram} g</td><td>${formatRupiah(p.totalHarga)}</td></tr>`
+
+            ).join('');
+
+        }
+
+
+
+        // ==================== BIAYA ====================
+
+        document.getElementById('simpanBiaya')?.addEventListener('click', () => {
+
+            const tanggal = document.getElementById('biayaTanggal').value || getTanggalNow();
+
+            const ket = document.getElementById('biayaKet').value.trim();
+
+            const jumlah = parseFloat(document.getElementById('biayaJumlah').value) || 0;
+
+            if (!ket || jumlah <= 0) return alert('Isi keterangan dan jumlah > 0');
+
+            data.operationalCosts.push({ id: Date.now(), tanggal, keterangan: ket, jumlah });
+
+            saveData();
+
+            renderBiayaTable();
+
+            document.getElementById('biayaKet').value = '';
+
+            document.getElementById('biayaJumlah').value = 0;
+
+        });
+
+
+
+        function renderBiayaTable() {
+
+            const tbody = document.getElementById('biayaBody');
+
+            if (!tbody) return;
+
+            tbody.innerHTML = data.operationalCosts.map(b => `<tr><td>${b.tanggal}</td><td>${b.keterangan}</td><td>${formatRupiah(b.jumlah)}</td></tr>`).join('');
+
+        }
+
+
+
+        // ==================== LAPORAN & FILTER ====================
+
+        let currentFilter = { start: null, end: null };
+
+
+
+        function getFilteredData(startDate, endDate) {
+
+            if (!startDate || !endDate) {
+
+                return {
+
+                    transactions: data.transactions.filter(t => t.status === 'active'),
+
+                    purchases: data.purchases,
+
+                    costs: data.operationalCosts
+
+                };
+
+            }
+
+            const start = new Date(startDate);
+
+            const end = new Date(endDate);
+
+            end.setHours(23,59,59,999);
+
+            const inRange = (itemTanggal) => {
+
+                const t = new Date(itemTanggal + 'T00:00:00');
+
+                return t >= start && t <= end;
+
+            };
+
+            return {
+
+                transactions: data.transactions.filter(t => t.status === 'active' && inRange(t.tanggalISO)),
+
+                purchases: data.purchases.filter(p => inRange(p.tanggal)),
+
+                costs: data.operationalCosts.filter(c => inRange(c.tanggal))
+
+            };
+
+        }
+
+
+
+        function renderLaporan() {
+
+            const start = document.getElementById('startDate').value;
+
+            const end = document.getElementById('endDate').value;
+
+            if (start && end && new Date(start) > new Date(end)) return alert('Tanggal akhir setelah awal');
+
+            currentFilter = { start, end };
+
+            const filtered = getFilteredData(start, end);
+
+
+
+            const totalPend = filtered.transactions.reduce((s,t) => s + t.total, 0);
+
+            const totalBeli = filtered.purchases.reduce((s,p) => s + p.totalHarga, 0);
+
+            const totalBiaya = filtered.costs.reduce((s,c) => s + c.jumlah, 0);
+
+            document.getElementById('labaTotalPendapatan').innerText = formatRupiah(totalPend);
+
+            document.getElementById('labaTotalPembelian').innerText = formatRupiah(totalBeli);
+
+            document.getElementById('labaTotalOperasional').innerText = formatRupiah(totalBiaya);
+
+            document.getElementById('labaBersih').innerText = formatRupiah(totalPend - totalBeli - totalBiaya);
+
+
+
+            const label = (start && end) ? `(${start} s/d ${end})` : '(Semua Data)';
+
+            document.getElementById('periodeLabel').innerText = label;
+
+            document.getElementById('transaksiPeriodeLabel').innerText = label;
+
+
+
+            // Tabel transaksi
+
+            const tbodyTrans = document.getElementById('laporanTransaksiBody');
+
+            tbodyTrans.innerHTML = filtered.transactions.slice().reverse().map(t => `
+
+                <tr>
+
+                    <td>${t.nomorFaktur}</td>
+
+                    <td>${t.customer}</td>
+
+                    <td>${t.tanggalTampil}</td>
+
+                    <td>Rp ${formatRupiah(t.total)}</td>
+
+                    <td><button class="icon-btn" onclick="loadTransaksiKeEdit('${t.id}')"><i class="fas fa-edit"></i></button></td>
+
+                </tr>
+
+            `).join('');
+
+
+
+            // Stok terkini
+
+            const tbodyStok = document.getElementById('laporanStokBody');
+
+            tbodyStok.innerHTML = data.products.map(p => `<tr><td>${p.nama}</td><td>${p.stokGram} g</td><td>${(p.stokGram/1000).toFixed(3)} kg</td></tr>`).join('');
+
+        }
+
+
+
+        window.loadTransaksiKeEdit = (idTrans) => {
+
+            const trans = data.transactions.find(t => t.id == idTrans);
+
+            if (!trans) return;
+
+            if (trans.status !== 'active') return alert('Transaksi ini sudah direvisi, gunakan yang terbaru.');
+
+
+
+            // Pindah ke tab kasir
+
+            document.querySelector('.tab[data-tab="kasir"]').click();
+
+
+
+            // Isi keranjang
+
+            keranjang = trans.items.map(it => ({...it}));
+
+            renderKeranjang();
+
+
+
+            // Set mode edit
+
+            document.getElementById('editIdTransaksi').value = trans.id;
+
+            document.getElementById('editNomorTransaksi').value = trans.nomorFaktur;
+
+            document.getElementById('revisiNote').value = '';
+
+            document.getElementById('batalEdit').style.display = 'inline-block';
+
+
+
+            // Isi customer
+
+            document.getElementById('kasirCustomer').value = trans.customer;
+
+        };
+
+
+
+        document.getElementById('filterLaporan')?.addEventListener('click', renderLaporan);
+
+        document.getElementById('resetFilter')?.addEventListener('click', () => {
+
+            document.getElementById('startDate').value = '';
+
+            document.getElementById('endDate').value = '';
+
+            renderLaporan();
+
+        });
+
+
+
+        // ==================== DOWNLOAD LAPORAN ====================
+
+        function downloadLaporanTeks(filtered) {
+
+            let teks = `TOKO BUAH MAMA ZAFRAN\nLAPORAN KEUANGAN\n`;
+
+            if (currentFilter.start && currentFilter.end) teks += `Periode: ${currentFilter.start} s/d ${currentFilter.end}\n`;
+
+            else teks += "Periode: Semua Data\n";
+
+            teks += `Pendapatan: Rp${formatRupiah(filtered.transactions.reduce((s,t)=>s+t.total,0))}\n`;
+
+            teks += `Pembelian: Rp${formatRupiah(filtered.purchases.reduce((s,p)=>s+p.totalHarga,0))}\n`;
+
+            teks += `Biaya Operasional: Rp${formatRupiah(filtered.costs.reduce((s,o)=>s+o.jumlah,0))}\n`;
+
+            teks += `Laba Bersih: Rp${formatRupiah(filtered.transactions.reduce((s,t)=>s+t.total,0) - filtered.purchases.reduce((s,p)=>s+p.totalHarga,0) - filtered.costs.reduce((s,o)=>s+o.jumlah,0))}\n\n`;
+
+            teks += "STOK SAAT INI:\n";
+
+            data.products.forEach(p => teks += `${p.nama}: ${p.stokGram} g (${p.stokGram/1000} kg)\n`);
+
+            teks += "\nTRANSAKSI PERIODE:\n";
+
+            filtered.transactions.slice().reverse().forEach(t => teks += `${t.nomorFaktur} - ${t.customer} - ${t.tanggalTampil} - Rp${formatRupiah(t.total)}\n`);
+
+            return teks;
+
+        }
+
+
+
+        document.getElementById('downloadLaporanStok')?.addEventListener('click', () => {
+
+            let teks = "LAPORAN STOK\n";
+
+            data.products.forEach(p => teks += `${p.nama}: ${p.stokGram} gram | ${p.stokGram/1000} kg\n`);
+
+            downloadTeks('laporan_stok.txt', teks);
+
+        });
+
+        document.getElementById('downloadLaporanBiaya')?.addEventListener('click', () => {
+
+            const filtered = getFilteredData(currentFilter.start, currentFilter.end);
+
+            let teks = "LAPORAN BIAYA OPERASIONAL\n";
+
+            if (currentFilter.start && currentFilter.end) teks += `Periode: ${currentFilter.start} s/d ${currentFilter.end}\n`;
+
+            filtered.costs.forEach(c => teks += `${c.tanggal} - ${c.keterangan}: Rp${formatRupiah(c.jumlah)}\n`);
+
+            teks += `TOTAL: Rp${formatRupiah(filtered.costs.reduce((s,c)=>s+c.jumlah,0))}`;
+
+            downloadTeks('laporan_biaya.txt', teks);
+
+        });
+
+        document.getElementById('downloadLaporanLabaRugi')?.addEventListener('click', () => {
+
+            const filtered = getFilteredData(currentFilter.start, currentFilter.end);
+
+            let teks = "LAPORAN LABA RUGI\n";
+
+            if (currentFilter.start && currentFilter.end) teks += `Periode: ${currentFilter.start} s/d ${currentFilter.end}\n`;
+
+            const pend = filtered.transactions.reduce((s,t)=>s+t.total,0);
+
+            const beli = filtered.purchases.reduce((s,p)=>s+p.totalHarga,0);
+
+            const op = filtered.costs.reduce((s,o)=>s+o.jumlah,0);
+
+            teks += `Pendapatan: Rp${formatRupiah(pend)}\nPembelian: Rp${formatRupiah(beli)}\nBiaya: Rp${formatRupiah(op)}\nLaba Bersih: Rp${formatRupiah(pend - beli - op)}`;
+
+            downloadTeks('laba_rugi.txt', teks);
+
+        });
+
+        document.getElementById('downloadSemuaLaporan')?.addEventListener('click', () => {
+
+            const filtered = getFilteredData(currentFilter.start, currentFilter.end);
+
+            downloadTeks('laporan_lengkap.txt', downloadLaporanTeks(filtered));
+
+        });
+
+
+
+        // ==================== TAB SWITCH ====================
+
+        const tabs = document.querySelectorAll('.tab');
+
+        const panels = { kasir:'panelKasir', produk:'panelProduk', pembelian:'panelPembelian', biaya:'panelBiaya', laporan:'panelLaporan' };
+
+        tabs.forEach(tab => {
+
+            tab.addEventListener('click', () => {
+
+                const target = tab.dataset.tab;
+
+                tabs.forEach(t => t.classList.remove('active'));
+
+                tab.classList.add('active');
+
+                Object.values(panels).forEach(id => document.getElementById(id)?.classList.remove('active'));
+
+                document.getElementById(panels[target])?.classList.add('active');
+
+                if (target === 'laporan') renderLaporan();
+
+                else if (target === 'produk') renderTabelProduk();
+
+                else if (target === 'pembelian') renderPembelianTable();
+
+                else if (target === 'biaya') renderBiayaTable();
+
+            });
+
+        });
+
+
+
+        // ==================== INIT ====================
+
+        loadData();
+
+        setupAutocompleteProduk('kasirProdukInput', 'kasirProdukSuggestions', 'kasirProdukId');
+
+        setupAutocompleteProduk('beliProdukInput', 'beliProdukSuggestions', 'beliProdukId');
+
+        setupTextAutocomplete('kasirCustomer', 'customerSuggestions', getUniqueCustomers);
+
+        setupTextAutocomplete('beliSupplier', 'supplierSuggestions', getUniqueSuppliers);
+
+        renderTabelProduk();
+
+        renderPembelianTable();
+
+        renderBiayaTable();
+
+        renderLaporan(); // untuk laporan awal (default kosong, semua data)
+
+        document.getElementById('biayaTanggal').value = getTanggalNow();
+
+        // Set default filter 30 hari terakhir
+
+        const today = new Date();
+
+        const thirtyAgo = new Date(); thirtyAgo.setDate(today.getDate() - 30);
+
+        document.getElementById('startDate').value = thirtyAgo.toISOString().slice(0,10);
+
+        document.getElementById('endDate').value = today.toISOString().slice(0,10);
+
+    })();
+
+</script>
+
+</body>
+
+</html>
+
+
+
+
